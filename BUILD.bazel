@@ -1,0 +1,11 @@
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+gazelle(
+    name = "gazelle",
+    command = "fix",
+    extra_args = [
+        "-build_tags",
+        "static",
+    ],
+    prefix = "github.com/lukealonso/go-sdl2",
+)

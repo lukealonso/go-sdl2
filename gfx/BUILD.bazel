@@ -1,0 +1,47 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "sdl_gfx.go",
+        "sdl_gfx_cgo_static.go",
+        "sdl_gfx_wrapper.h",
+    ],
+    cgo = True,
+    clinkopts = [
+        "-Lgfx/.go-sdl2-libs",
+    ] + select({
+        "@io_bazel_rules_go//go/platform:android_arm": [
+            "-lSDL2_gfx_android_arm -lSDL2_android_arm -Wl,--no-undefined -lm -ldl -llog -landroid -lGLESv2",
+        ],
+        "@io_bazel_rules_go//go/platform:darwin_amd64": [
+            "-lSDL2_gfx_darwin_amd64 -lSDL2_darwin_amd64 -lm -liconv -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,CoreVideo -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,Metal",
+        ],
+        "@io_bazel_rules_go//go/platform:linux_386": [
+            "-lSDL2_gfx_linux_386 -lSDL2_linux_386 -Wl,--no-undefined -lm -ldl -lasound -lm -ldl -lpthread -lX11 -lXext -lXcursor -lXinerama -lXi -lXrandr -lXss -lXxf86vm -lpthread -lrt",
+        ],
+        "@io_bazel_rules_go//go/platform:linux_amd64": [
+            "-lSDL2_gfx_linux_amd64 -lSDL2_linux_amd64 -Wl,--no-undefined -lm -ldl -lasound -lm -ldl -lpthread -lX11 -lXext -lXcursor -lXinerama -lXi -lXrandr -lXss -lXxf86vm -lpthread -lrt",
+        ],
+        "@io_bazel_rules_go//go/platform:linux_arm": [
+            "-L/opt/vc/lib -L/opt/vc/lib64 -lSDL2_gfx_linux_arm -lSDL2_linux_arm -Wl,--no-undefined -lm -ldl -liconv -lbcm_host -lvcos -lvchiq_arm -pthread",
+        ],
+        "@io_bazel_rules_go//go/platform:windows_386": [
+            "-lSDL2_gfx_windows_386 -lSDL2_windows_386 -Wl,--no-undefined -lSDL2main_windows_386 -mwindows -Wl,--no-undefined -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lsetupapi -static-libgcc",
+        ],
+        "@io_bazel_rules_go//go/platform:windows_amd64": [
+            "-lSDL2_gfx_windows_amd64 -lSDL2_windows_amd64 -Wl,--no-undefined -lSDL2main_windows_amd64 -mwindows -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lsetupapi -static-libgcc",
+        ],
+        "//conditions:default": [],
+    }),
+    copts = ["-Igfx/.go-sdl2-libs/include -Igfx/.go-sdl2-libs/include/SDL2"],
+    importpath = "github.com/lukealonso/go-sdl2/gfx",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_veandco_go_sdl2//sdl:go_default_library"],
+)
+
+go_test(
+    name = "go_default_test",
+    srcs = ["sdl_gfx_test.go"],
+    embed = [":go_default_library"],
+)

@@ -7,7 +7,7 @@ package sdl
 #if defined(_WIN32)
 	#include <SDL2/SDL_vulkan.h>
 #else
-	#include <SDL_vulkan.h>
+	#include "SDL2/SDL_vulkan.h"
 #endif
 #else //!SDL_VERSION_ATLEAST(2,0,6)
 

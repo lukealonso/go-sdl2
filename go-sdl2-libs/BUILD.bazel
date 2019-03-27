@@ -1,0 +1,16 @@
+
+cc_library(
+    name = "linux",
+    strip_include_prefix = "include",
+    hdrs = glob(["include/**/*.h"]),
+    srcs = glob(["*_linux_amd64.a"]),
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "darwin",
+    strip_include_prefix = "include",
+    hdrs = glob(["include/**/*.h"]),
+    srcs = glob(["*_darwin_amd64.a"]),
+    visibility = ["//visibility:public"],
+)

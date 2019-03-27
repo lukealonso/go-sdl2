@@ -6,7 +6,7 @@ package sdl
 #if defined(__WIN32)
 #include <SDL2/SDL_syswm.h>
 #else
-#include <SDL_syswm.h>
+#include "SDL2/SDL_syswm.h"
 #endif
 
 #if !(SDL_VERSION_ATLEAST(2,0,2))
